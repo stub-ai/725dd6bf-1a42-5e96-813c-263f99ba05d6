@@ -11,27 +11,24 @@ const VideoCall = dynamic(() => import('../components/VideoCall'), {
 const Home = () => {
   const [id, setId] = useState('');
   const [room, setRoom] = useState('');
+  const [rooms, setRooms] = useState<{ [key: string]: number }>({});
 
   // Generate a unique ID for the user if they don't have one
   useEffect(() => {
-    const id = localStorage.getItem('id');
-    const room = localStorage.getItem('room');
-    if (!id) {
-      const newId = Math.random().toString(36).substring(2, 15);
-      setId(newId);
-      localStorage.setItem('id', newId);
-    } else {
-      setId(id);
-    }
-    if (room) {
-      setRoom(room);
-    }
+    // ...existing code...
+
+    // TODO: Fetch the current rooms and their participant counts from your server
+    // setRooms(fetchedRooms);
   }, []);
 
   return (
     <div>
       <Header id={id} />
-      {id && room ? <VideoCall id={id} room={room} /> : <Login onIdSubmit={setId} onRoomSubmit={setRoom} />}
+      {id && room ? (
+        <VideoCall id={id} room={room} participants={rooms[room] || 0} />
+      ) : (
+        <Login onIdSubmit={setId} onRoomSubmit={setRoom} rooms={rooms} />
+      )}
     </div>
   );
 };

@@ -3,9 +3,10 @@ import React, { useState, FormEvent } from 'react';
 interface LoginProps {
   onIdSubmit: (id: string) => void;
   onRoomSubmit: (room: string) => void;
+  rooms: { [key: string]: number };
 }
 
-const Login: React.FC<LoginProps> = ({ onIdSubmit, onRoomSubmit }) => {
+const Login: React.FC<LoginProps> = ({ onIdSubmit, onRoomSubmit, rooms }) => {
   const [id, setId] = useState('');
   const [room, setRoom] = useState('');
 
@@ -18,23 +19,30 @@ const Login: React.FC<LoginProps> = ({ onIdSubmit, onRoomSubmit }) => {
   return (
     <form onSubmit={handleSubmit} className="flex flex-col items-center justify-center h-screen">
       <label htmlFor="id" className="mb-2">
-        Enter your ID:
+        Your ID:
       </label>
       <input
-        type="text"
         id="id"
+        type="text"
+        value={id}
         onChange={(e) => setId(e.target.value)}
         className="mb-4 p-2 border-2 border-gray-300 rounded-md"
       />
       <label htmlFor="room" className="mb-2">
-        Enter room:
+        Join a room:
       </label>
-      <input
-        type="text"
+      <select
         id="room"
+        value={room}
         onChange={(e) => setRoom(e.target.value)}
         className="mb-4 p-2 border-2 border-gray-300 rounded-md"
-      />
+      >
+        {Object.entries(rooms).map(([room, participants]) => (
+          <option key={room} value={room}>
+            {room} ({participants} participants)
+          </option>
+        ))}
+      </select>
       <button type="submit" className="p-2 bg-blue-500 text-white rounded-md">
         Login
       </button>
